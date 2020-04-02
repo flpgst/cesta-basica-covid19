@@ -47,6 +47,15 @@
             validate-on-blur
           />
         </v-col>
+        <v-col cols="12" md="6">
+          <v-select 
+            v-model="userPermission"
+            :items="permissoes"
+            item-text="name"
+            item-value="id"
+            :rules="[ v => !!v ]"
+          />
+        </v-col>
       </v-row>
       <v-row justify="end">
         <v-col md="auto">
@@ -76,10 +85,15 @@
 <script>
 export default {
   name: "criar-usuario",
+  mounted() {
+    this.listarPermissioes()
+  },
   data: () => ({
     nome: "",
     login: "",
     senha: "",
+    userPermission: null,
+    permissoes: [],
     senhaConfirmacao: "",
     snackbarColor: "",
     snackbarMessage: "",
@@ -89,10 +103,10 @@ export default {
     salvarUsuario() {
       if (this.$refs.form.validate()) {
         this.$http
-          .post("rota de salvar usuário", {
+          .criar("users", {
             name: this.name,
             login: this.login,
-            password: btoa(this.senha)
+            password: this.senha
           })
           .then(() => {
             this.snackbarMessage = "Usuário cadastrado com sucesso.";
@@ -100,8 +114,10 @@ export default {
             this.snackbarShow = true;
             this.$refs.form.reset();
           })
-          .error(() => {
-            /* exibir mensagem de erro */
+          .error(e => {
+            this.snackbarMessage = e.error;
+            this.snackbarColor = "error";
+            this.snackbarShow = true;
           });
       } else {
         this.snackbarMessage =
@@ -109,6 +125,10 @@ export default {
         this.snackbarColor = "error";
         this.snackbarShow = true;
       }
+    },
+    listarPermissioes() {
+      this.$http.listar('permissions')
+        .then(p => this.permissoes = p.permissions)
     }
   }
 };

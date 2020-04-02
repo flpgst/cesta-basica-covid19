@@ -10,9 +10,9 @@
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              <form @submit.prevent="onSubmit">
+              <v-form>
                 <v-text-field
-                  v-model="username"
+                  v-model="login"
                   name="login"
                   label="Usuário"
                   type="text"
@@ -23,10 +23,10 @@
                   label="Senha"
                   type="password"
                 />
-                <v-btn type="submit" color="primary">
+                <v-btn @click.prevent="onSubmit()" color="primary">
                   Entrar
                 </v-btn>
-              </form>
+              </v-form>
             </v-card-text>
           </v-card>
         </v-flex>
@@ -36,25 +36,35 @@
 </template>
 
 <script>
+import api from '../plugins/api'
+
 export default {
   name: "login-form",
   data: () => ({
-    username: "",
+    login: "",
     password: ""
   }),
   methods: {
     onSubmit() {
-      const password = btoa(this.password);
-      return this.$http
-        .criar("rota de login", { username: this.username, password })
-        .then(async credenciais => {
-          this.vuex = credenciais;
-          /* Joga pro localStorage */
-          // armazenarInformacoes(credenciais)
-          // await carregarAlocacoes()
-          // return Promise.resolve(credenciais.usuario)
+      return api.criar('sessions', { login: this.login, password: this.password })
+        .then(session => {
+            localStorage.setItem('token', session.token)
+            this.$router.push(`/${this.redirectUser(session.user.permission)}`)
+            // return Promise.resolve(credenciais.usuario)
         })
-        .catch(error => Promise.reject(error));
+        .catch(erro => Promise.reject(erro))
+    },
+    redirectUser(permission) {
+      switch(permission) {
+        case "admin": 
+          return "entrega";
+        
+        case "cadastro": 
+          return "cadastro";
+
+        case "entrega": 
+          return "entrega";
+      }
     }
   }
 };
