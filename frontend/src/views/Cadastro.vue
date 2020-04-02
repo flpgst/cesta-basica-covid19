@@ -167,8 +167,10 @@ export default {
 
     methods: {
         onClickBuscar() {
-            console.log('Clicou para Buscar o CPF');
-            console.log('this.cpfBusca :', this.cpfBusca);
+            this.$http.listar('people', {
+                cpf: this.cpfBusca
+            })
+                .then(p => this.cpfBusca = p.cpf)
             //Promise para verificar se CPF já existe
             //Caso não exista .then()
             this.message = 'CPF não encontrado'

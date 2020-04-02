@@ -18,7 +18,16 @@ class PersonController {
   }
 
   async index(req, res) {
-    const people = await Person.findAll()
+    
+    const {cpf} = req.query
+    
+    const people =  cpf ?
+    await Person.findOne({
+      where: {cpf}
+    })  
+    : await Person.findAll()
+    
+    
 
     return res.json({
       people
