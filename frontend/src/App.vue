@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/lista_cadastrados">Pessoas Cadastradas</router-link> |
+      <router-link to="/criar_usuario">Criar Usuário</router-link> |
     </div>
     <router-view />
-  </div>
+  </v-app>
 </template>
 
 <style>
