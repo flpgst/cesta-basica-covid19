@@ -116,11 +116,11 @@ export default {
             this.snackbarShow = true;
             this.$refs.form.reset();
           })
-          // .error(e => {
-          //   this.snackbarMessage = e.error;
-          //   this.snackbarColor = "error";
-          //   this.snackbarShow = true;
-          // })
+          .catch(() => {
+            this.snackbarMessage = "Erro ao cadastrar usuário";
+            this.snackbarColor = "error";
+            this.snackbarShow = true;
+          })
       } else {
         this.snackbarMessage =
           "Verifique os dados informados e tente novamente.";

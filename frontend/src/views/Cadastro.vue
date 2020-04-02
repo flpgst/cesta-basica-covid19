@@ -171,11 +171,15 @@ export default {
                 cpf: this.cpfBusca
             })
                 .then(p => this.cpfBusca = p.cpf)
+                .catch(() => {
+                        this.message = 'CPF não encontrado'
+                        this.colorMessage = 'error'
+                        this.showMessage = true
+                    })
             //Promise para verificar se CPF já existe
             //Caso não exista .then()
-            this.message = 'CPF não encontrado'
-            this.colorMessage = 'error'
-            this.showMessage = true
+            
+            
             this.showBtnCadastrar = true
         },
 

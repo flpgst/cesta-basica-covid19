@@ -21,13 +21,16 @@ class PersonController {
     
     const {cpf} = req.query
     
-    const people =  cpf ?
-    await Person.findOne({
-      where: {cpf}
-    })  
-    : await Person.findAll()
+    let people =  {}
     
-    
+    if(cpf) {
+      people = await Person.findOne({
+        where: {cpf}
+      })
+      if(!people) return res.status(400).json({error: "CPF nâo encontrado"}) 
+    } else {
+      people = await Person.findAll()
+    }
 
     return res.json({
       people
