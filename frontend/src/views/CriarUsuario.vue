@@ -50,6 +50,7 @@
         <v-col cols="12" md="6">
           <v-select 
             v-model="userPermission"
+            label="Permissão"
             :items="permissoes"
             item-text="name"
             item-value="id"
@@ -104,9 +105,10 @@ export default {
       if (this.$refs.form.validate()) {
         this.$http
           .criar("users", {
-            name: this.name,
+            name: this.nome,
             login: this.login,
-            password: this.senha
+            password: this.senha,
+            permission_id: this.userPermission
           })
           .then(() => {
             this.snackbarMessage = "Usuário cadastrado com sucesso.";
@@ -114,11 +116,11 @@ export default {
             this.snackbarShow = true;
             this.$refs.form.reset();
           })
-          .error(e => {
-            this.snackbarMessage = e.error;
-            this.snackbarColor = "error";
-            this.snackbarShow = true;
-          });
+          // .error(e => {
+          //   this.snackbarMessage = e.error;
+          //   this.snackbarColor = "error";
+          //   this.snackbarShow = true;
+          // })
       } else {
         this.snackbarMessage =
           "Verifique os dados informados e tente novamente.";
