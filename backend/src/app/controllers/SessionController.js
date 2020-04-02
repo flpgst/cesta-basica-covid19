@@ -1,13 +1,23 @@
 import jwt from 'jsonwebtoken'
 
 import User from '../models/User'
+import Permission from '../models/Permission'
 import authConfig from '../../config/auth'
 
 class SessionController {
   async store(req, res) {
     const { login, password } = req.body
 
-    const user = await User.findOne({ where: { login } })
+    const user = await User.findOne({ 
+      where: { login },
+      include: [
+        {
+          model: Permission,
+          as: 'permission',
+          attributes: ['name']
+        }
+      ]
+     })
 
     if (!user) return res.status(401).json({ error: 'Usuário não existe' })
 
@@ -20,7 +30,8 @@ class SessionController {
       user: {
         id,
         name,
-        login
+        login,
+        permission: user.permission.name 
       },
       token: jwt.sign({ id }, authConfig.secret, {
         expiresIn: authConfig.expiresIn

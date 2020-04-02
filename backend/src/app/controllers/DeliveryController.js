@@ -37,7 +37,6 @@ class DeliveryController {
   async index(req, res) {
     
     const { person_id } = req.body
-    console.log('person_id :', person_id);
     
     const whereStatement = {}
     if(person_id) {
