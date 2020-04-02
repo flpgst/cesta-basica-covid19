@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <div id="nav">
-      <router-link to="/cadastro">Cadastro</router-link>
+      <router-link to="/cadastro">Cadastro</router-link> | 
       <router-link to="/lista_cadastrados">Pessoas Cadastradas</router-link> |
       <router-link to="/criar_usuario">Criar Usuário</router-link> |
     </div>
