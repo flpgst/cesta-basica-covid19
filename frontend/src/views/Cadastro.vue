@@ -1,12 +1,15 @@
 <template>
   <v-container>
-    <v-card v-if="!showForm">
-      <v-card-title class="font-weight-bold">
+    <v-row>
+      <v-col v-if="!showForm" cols="auto" class="title">
         Pesquisar Cadastro
-      </v-card-title>
-      <v-container>
-        <v-row>
-          <v-col>
+      </v-col>
+      <v-col v-else cols="auto" class="title">
+         Cadastrar Novo Beneficiário
+      </v-col>
+    </v-row>
+    <v-card v-if="!showForm">
+        <v-col>
             <v-text-field
               v-model="cpfBusca"
               @input="onChangeBuscar()"
@@ -17,8 +20,7 @@
               required
               autofocus
             ></v-text-field>
-          </v-col>
-        </v-row>
+        </v-col>
         <v-col>
           <v-btn
             @click="onClickBuscar()"
@@ -33,17 +35,11 @@
         <v-alert v-if="cpfCadastrado" type="warning"
           >O CPF {{ cpfCadastrado }} já está cadastrado.</v-alert
         >
-      </v-container>
     </v-card>
 
     <v-form ref="form" lazy-validation @submit.prevent="onClickSave()">
       <v-card v-if="showForm">
-        <v-card-title class="font-weight-bold">
-          Cadastrar Novo Beneficiário
-        </v-card-title>
-        <v-container>
-          <v-row>
-            <v-col cols="12" md="12">
+            <v-col>
               <v-text-field
                 v-model="nome"
                 :rules="[v => !!v]"
@@ -53,7 +49,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12">
+            <v-col>
               <v-text-field
                 v-model="cpf"
                 type="number"
@@ -84,7 +80,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12">
+            <v-col>
               <v-text-field
                 v-model="endereco_bairro"
                 :rules="[v => !!v]"
@@ -93,7 +89,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12">
+            <v-col>
               <v-text-field
                 v-model="qtde_pessoas"
                 type="number"
@@ -103,7 +99,7 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12">
+            <v-col>
               <v-text-field
                 v-model="qtde_cestas"
                 type="number"
@@ -118,8 +114,7 @@
                 Salvar
               </v-btn>
             </v-col>
-          </v-row>
-        </v-container>
+        
       </v-card>
     </v-form>
 

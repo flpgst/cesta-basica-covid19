@@ -1,10 +1,12 @@
 <template>
   <v-container>
+    <v-row>
+      <v-col cols="auto" class="title">
+        Cadastrar Novo Usuário
+      </v-col>
+    </v-row>
     <v-form ref="form" lazy-validation @submit.prevent="salvarUsuario()">
       <v-card>
-        <v-card-title class="font-weight-bold">
-          Cadastrar Novo Usuário
-        </v-card-title>
         <v-col>
           <v-text-field
             v-model="nome"
@@ -49,14 +51,12 @@
             :rules="[v => !!v]"
           />
         </v-col>
-      </v-card>
-      <v-row justify="end">
-        <v-col md="auto">
+        <v-col>
           <v-btn color="primary" type="submit" block>
             SALVAR
           </v-btn>
         </v-col>
-      </v-row>
+      </v-card>
     </v-form>
     <v-snackbar
       v-model="snackbarShow"

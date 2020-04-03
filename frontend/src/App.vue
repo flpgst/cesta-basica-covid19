@@ -1,14 +1,20 @@
 <template>
   <v-app id="app">
     <Login v-if="!user" @autenticado="autenticar" />
-    <div v-else>
+    <v-container>
+        <v-row>
+        <v-col>
         <v-app-bar
-          app
-          fixed
+        app
+          elevate-on-scroll
           dark
           color="primary"
         >
+          <v-toolbar-title>
+          Entrega de Mantimentos | COVID-19
+          </v-toolbar-title>
           <v-spacer />
+          <v-toolbar-items>
           <v-btn 
             v-if="permission === 'admin' || permission === 'cadastro'"
             :text="!isCadastro"
@@ -52,10 +58,19 @@
             @click="logout"
           >
               Sair
-          </v-btn> 
+          </v-btn>
+          </v-toolbar-items>
         </v-app-bar>
-      <router-view />
-    </div>
+        </v-col>
+        </v-row>
+        <v-row>
+        <v-col>
+          <router-view />
+        </v-col>
+        </v-row>
+    </v-container>
+  
+  
   </v-app>
 </template>
 
