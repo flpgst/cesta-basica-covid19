@@ -8,12 +8,15 @@
       <router-link v-if="permission === 'admin'" to="/criar_usuario">Criar Usuário</router-link> |
       <a href="#" @click="logout">Sair</a> 
     </div>
+    <router-view />
+    </div>
+    
   </v-app>
 </template>
 
 <script>
-import Login from "./views/Login";
-import EventBus from "./plugins/eventBus";
+import Login from "./views/Login"
+import EventBus from './plugins/eventBus';
 
 export default {
   components: {
@@ -51,8 +54,12 @@ export default {
       localStorage.clear();
       window.location = "/";
     }
-  }
-};
+  },
+  
+  
+
+
+}
 </script>
 
 <style>
