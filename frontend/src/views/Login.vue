@@ -1,6 +1,6 @@
 <template>
   <v-content>
-    <v-container fill-height class="login-page">
+    <v-container fluid fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>
           <v-card class="elevation-12">
@@ -23,7 +23,7 @@
                   label="Senha"
                   type="password"
                 />
-                <v-btn @click.prevent="onSubmit()" color="primary">
+                <v-btn @click.prevent="onSubmit()" color="primary" block>
                   Entrar
                 </v-btn>
               </v-form>
@@ -53,8 +53,8 @@ import api from "../plugins/api";
 export default {
   name: "login-form",
   data: () => ({
-    login: "",
-    password: "",
+    login: null,
+    password: null,
     snackbarColor: "error",
     snackbarMessage: "Login e senha não conferem",
     snackbarShow: false
@@ -85,10 +85,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-/* .login-page { 
-        background: url('../assets/login.jpg') no-repeat center center;
-        background-size: 100% 100%;
-    } */
-</style>

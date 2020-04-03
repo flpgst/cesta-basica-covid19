@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <Login v-if="!user" @autenticado="autenticar" />
-    <v-container>
+    <v-container v-else>
         <v-row>
         <v-col>
         <v-app-bar
