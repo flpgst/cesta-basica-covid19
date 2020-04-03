@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-form ref="form" lazy-validation @submit.prevent="salvarUsuario()">
       <v-card>
         <v-card-title class="font-weight-bold">

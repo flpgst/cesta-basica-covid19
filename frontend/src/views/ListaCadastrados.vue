@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="pessoas" fluid>
+  <v-container v-if="pessoas">
     <v-row>
       <v-col cols="auto" class="title">
         Pessoas cadastradas

@@ -9,7 +9,7 @@ class PersonController {
 
     if(personExists) return (res.status(400).json('Este CPF já está cadastrado'))
 
-    const { id, name } = await Person.create(req.body)
+    const { id, name } = await Person.create({... req.body, user_creator_id: req.userId})
     return res.json({
       id,
       name,

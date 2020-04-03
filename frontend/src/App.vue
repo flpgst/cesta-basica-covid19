@@ -11,57 +11,47 @@
           <v-spacer />
           <v-btn 
             v-if="permission === 'admin' || permission === 'cadastro'"
-            x-large
             :text="!isCadastro"
-            :color="isCadastro ? 'indigo lighten-5 indigo--text' : ''" 
+            depressed
+            :color="isCadastro ? 'white indigo--text' : ''" 
             to="/cadastro"
           >
-            <span :class="`pt-${isCadastro ? 0 : 7}`">
-              Cadastro
-            </span>
+            Cadastro
           </v-btn>
           <v-btn 
             v-if="permission === 'admin' || permission === 'entrega'"
-            x-large 
             :text="!isEntrega"
-            :color="isEntrega ? 'indigo lighten-5 indigo--text' : ''" 
+            depressed
+            :color="isEntrega ? 'white indigo--text' : ''" 
             to="/entrega"
           >
-            <span :class="`pt-${isEntrega ? 0 : 7}`">
-              Entrega
-            </span>
+            Entrega
           </v-btn>
           <v-btn 
             v-if="permission === 'admin'"  
-            x-large 
             :text="!isPessoas"
-            :color="isPessoas ? 'indigo lighten-5 indigo--text' : ''" 
+            depressed
+            :color="isPessoas ? 'white indigo--text' : ''" 
             to="/lista_cadastrados"
           >
-            <span :class="`pt-${isPessoas ? 0 : 7}`">
               Pessoas Cadastradas
-            </span>
           </v-btn> 
           <v-btn 
             v-if="permission === 'admin'" 
-            x-large 
             :text="!isUsuario"
-            :color="isUsuario ? 'indigo lighten-5 indigo--text' : ''" 
+            depressed
+            :color="isUsuario ? 'white indigo--text' : ''" 
             to="/criar_usuario"
           >
-            <span :class="`pt-${isUsuario ? 0 : 7}`">
               Criar Usuário
-            </span>
           </v-btn>
           <v-spacer />
           <v-btn 
-            x-large 
-            text 
+            text
+            depressed
             @click="logout"
           >
-            <span>
               Sair
-            </span>
           </v-btn> 
         </v-app-bar>
       <router-view />
