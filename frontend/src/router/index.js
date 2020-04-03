@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Login from "../views/Login.vue";
-import EventBus from '../plugins/eventBus';
+import EventBus from "../plugins/eventBus";
 
 Vue.use(VueRouter);
 
@@ -11,13 +11,13 @@ const routes = [
     name: "Login",
     component: Login
   },
-  
+
   {
     path: "/lista_cadastrados",
     name: "Pessoas Cadastradas",
     beforeEnter: (to, from, next) => {
-      if (EventBus.permission !== 'admin') next({name: from.name})
-      else next()
+      if (EventBus.permission !== "admin") next({ name: from.name });
+      else next();
     },
     component: () =>
       import(
@@ -28,31 +28,38 @@ const routes = [
     path: "/criar_usuario",
     name: "Criar Usuário",
     beforeEnter: (to, from, next) => {
-      if (EventBus.permission !== 'admin') next({name: from.name})
-      else next()
+      if (EventBus.permission !== "admin") next({ name: from.name });
+      else next();
     },
     component: () =>
-      import(
-        /* webpackChunkName: "criarUsuario" */ "../views/CriarUsuario.vue"
-      )
+      import(/* webpackChunkName: "criarUsuario" */ "../views/CriarUsuario.vue")
   },
   {
     path: "/cadastro",
     name: "Cadastro",
     beforeEnter: (to, from, next) => {
-      if (EventBus.permission !== 'admin' && EventBus.permission !== 'cadastro') next({name: from.name})
-      else next()
+      if (EventBus.permission !== "admin" && EventBus.permission !== "cadastro")
+        next({ name: from.name });
+      else next();
     },
     component: () =>
-      import(
-        /* webpackChunkName: "cadastro" */ "../views/Cadastro.vue"
-      )
+      import(/* webpackChunkName: "cadastro" */ "../views/Cadastro.vue")
+  },
+  {
+    path: "/entrega",
+    name: "Entrega",
+    beforeEnter: (to, from, next) => {
+      if (EventBus.permission !== "admin" && EventBus.permission !== "entrega")
+        next({ name: from.name });
+      else next();
+    },
+    component: () =>
+      import(/* webpackChunkName: "cadastro" */ "../views/Entrega.vue")
   }
 ];
 
 const router = new VueRouter({
   routes
 });
-
 
 export default router;
