@@ -6,24 +6,18 @@ import sequelize from 'sequelize'
 class DeliveryController {
   async store(req, res) {
     
-    const { cpf } = req.body
-
-    const person = await Person.findOne({
-      where: { cpf }
-    })
+    const { person_id } = req.query
 
     const lastDelivery = await Delivery.findAll({
       limit: 1,
-      where: {
-        "person_id": person.id 
-      },
+      where: { person_id },
       order: [ [ 'createdAt', 'DESC' ]]
     })
 
     // fazer verificação de 30 dias
 
     const delivery = {
-      "person_id": person.id,
+      person_id,
       "user_deliverer_id": req.userId 
     }
 
