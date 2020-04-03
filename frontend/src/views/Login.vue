@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import api from '../plugins/api'
+import api from "../plugins/api";
 
 export default {
   name: "login-form",
@@ -46,23 +46,24 @@ export default {
   }),
   methods: {
     onSubmit() {
-      return api.criar('sessions', { login: this.login, password: this.password })
+      return api
+        .criar("sessions", { login: this.login, password: this.password })
         .then(session => {
-            localStorage.setItem('token', session.token)
-            this.$router.push(`/${this.redirectUser(session.user.permission)}`)
-            // return Promise.resolve(credenciais.usuario)
+          localStorage.setItem("token", session.token);
+          this.$router.push(`/${this.redirectUser(session.user.permission)}`);
+          // return Promise.resolve(credenciais.usuario)
         })
-        .catch(erro => Promise.reject(erro))
+        .catch(erro => Promise.reject(erro));
     },
     redirectUser(permission) {
-      switch(permission) {
-        case "admin": 
+      switch (permission) {
+        case "admin":
           return "entrega";
-        
-        case "cadastro": 
+
+        case "cadastro":
           return "cadastro";
 
-        case "entrega": 
+        case "entrega":
           return "entrega";
       }
     }

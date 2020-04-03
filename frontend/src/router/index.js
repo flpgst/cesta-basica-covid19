@@ -36,7 +36,7 @@ const routes = [
     path: "/cadastro",
     name: "Cadastro",
     component: Cadastro
-  },
+  }
 ];
 
 const router = new VueRouter({

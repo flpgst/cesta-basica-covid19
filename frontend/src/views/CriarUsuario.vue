@@ -1,19 +1,15 @@
 <template>
-  <v-container fluid class="pa-5">
-    <v-row justify="start">
-      <v-col cols="auto" cols-xs="12" class="title">
-        Digite as informações do novo usuário nos campos abaixo
-      </v-col>
-    </v-row>
-    <v-divider class="mb-5" />
+  <v-container fluid>
     <v-form
       ref="form"
       lazy-validation
-      @submit.prevent="salvarUsuario()"
-      class="pl-4"
+      @submit.prevent="salvarUsuario()" 
     >
-      <v-row>
-        <v-col cols="12" md="6">
+      <v-card>
+        <v-card-title class="font-weight-bold">
+        Cadastrar Novo Usuário
+      </v-card-title>
+        <v-col>
           <v-text-field
             v-model="nome"
             label="Nome"
@@ -21,7 +17,7 @@
             validate-on-blur
           />
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col>
           <v-text-field
             v-model="login"
             label="Login"
@@ -29,7 +25,7 @@
             validate-on-blur
           />
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col>
           <v-text-field
             v-model="senha"
             label="Senha"
@@ -38,7 +34,7 @@
             validate-on-blur
           />
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col>
           <v-text-field
             v-model="senhaConfirmacao"
             label="Confirmar senha"
@@ -47,24 +43,23 @@
             validate-on-blur
           />
         </v-col>
-        <v-col cols="12" md="6">
-          <v-select 
+        <v-col>
+          <v-select
             v-model="userPermission"
             label="Permissão"
             :items="permissoes"
             item-text="name"
             item-value="id"
-            :rules="[ v => !!v ]"
+            :rules="[v => !!v]"
           />
         </v-col>
-      </v-row>
+      </v-card>
       <v-row justify="end">
         <v-col md="auto">
           <v-btn
             color="primary"
             type="submit"
-            position="right"
-            :block="$vuetify.breakpoint.smAndDown"
+            block
           >
             SALVAR
           </v-btn>
@@ -72,13 +67,19 @@
       </v-row>
     </v-form>
     <v-snackbar
-      v-model="snackbarShow"
-      top
-      multi-line
-      :color="snackbarColor"
-      :timeout="4000"
+        v-model="snackbarShow"
+        top
+        right
+        :color="snackbarColor"
+        :timeout=4000
     >
       {{ snackbarMessage }}
+       <v-btn
+        icon
+        @click="snackbarShow = false"
+      >
+        <v-icon>mdi-close-circle-outline</v-icon>
+      </v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -87,7 +88,7 @@
 export default {
   name: "criar-usuario",
   mounted() {
-    this.listarPermissioes()
+    this.listarPermissioes();
   },
   data: () => ({
     nome: "",
@@ -120,7 +121,7 @@ export default {
             this.snackbarMessage = "Erro ao cadastrar usuário";
             this.snackbarColor = "error";
             this.snackbarShow = true;
-          })
+          });
       } else {
         this.snackbarMessage =
           "Verifique os dados informados e tente novamente.";
@@ -129,8 +130,9 @@ export default {
       }
     },
     listarPermissioes() {
-      this.$http.listar('permissions')
-        .then(p => this.permissoes = p.permissions)
+      this.$http
+        .listar("permissions")
+        .then(p => (this.permissoes = p.permissions));
     }
   }
 };
