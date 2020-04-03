@@ -32,6 +32,21 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <v-snackbar
+        v-model="snackbarShow"
+        top
+        right
+        :color="snackbarColor"
+        :timeout=4000
+    >
+      {{ snackbarMessage }}
+       <v-btn
+        icon
+        @click="snackbarShow = false"
+      >
+        <v-icon>mdi-close-circle-outline</v-icon>
+      </v-btn>
+    </v-snackbar>
   </v-content>
 </template>
 
@@ -42,18 +57,32 @@ export default {
   name: "login-form",
   data: () => ({
     login: "",
-    password: ""
+    password: "",
+    snackbarColor: "error",
+    snackbarMessage: "Login e senha não conferem",
+    snackbarShow: false
+
   }),
+  mounted() {
+    this.autenticate(localStorage)
+  },
   methods: {
+    autenticate({login, password}) {
+      if(!login || !password) return
+      api.criar("sessions", { login, password })
+      .then(session => {
+        localStorage.setItem("token", session.token)
+        this.$emit('autenticado',session.user.permission)
+      })
+    },
     onSubmit() {
       return api
         .criar("sessions", { login: this.login, password: this.password })
         .then(session => {
-          localStorage.setItem("token", session.token);
-          this.$router.push(`/${this.redirectUser(session.user.permission)}`);
-          // return Promise.resolve(credenciais.usuario)
+          localStorage.setItem("token", session.token)
+          this.$emit('autenticado',session.user.permission)
         })
-        .catch(erro => Promise.reject(erro));
+        .catch(() => this.snackbarShow = true)
     },
     redirectUser(permission) {
       switch (permission) {

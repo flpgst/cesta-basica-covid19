@@ -1,4 +1,5 @@
 import Person from '../models/Person'
+import User from '../models/User'
 
 class PersonController {
   async store(req, res) {
@@ -29,7 +30,15 @@ class PersonController {
       })
       if(!people) return res.status(400).json({error: "CPF nâo encontrado"}) 
     } else {
-      people = await Person.findAll()
+      people = await Person.findAll({
+        include: [
+          {
+            model: User,
+            as: 'user_creator',
+            attributes: ['name']
+          }
+        ]
+      })
     }
 
     return res.json({

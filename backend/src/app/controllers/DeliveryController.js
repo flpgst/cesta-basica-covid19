@@ -36,7 +36,7 @@ class DeliveryController {
 
   async index(req, res) {
     
-    const { person_id } = req.body
+    const { person_id } = req.query
     
     const whereStatement = {}
     if(person_id) {

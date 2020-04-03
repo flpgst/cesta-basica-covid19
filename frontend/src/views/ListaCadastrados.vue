@@ -1,172 +1,85 @@
 <template>
-  <v-container v-if="pessoas" fluid class="pa-5">
-    <v-row justify="start">
-      <v-col cols="auto" cols-xs="12" class="title">
-        Lista de todas as pessoas cadastradas no programa de cestas básicas
+  <v-container v-if="pessoas" fluid>
+    <v-row >
+      <v-col cols="auto" class="title">
+        Pessoas cadastradas
       </v-col>
     </v-row>
-    <v-divider class="mb-5" />
-    <v-row>
-      <v-expansion-panels hover popout>
-        <v-expansion-panel v-for="pessoa in pessoas" :key="pessoa.id">
-          <v-expansion-panel-header
-            :color="pessoa.entregue ? 'success' : 'error'"
-            :class="[
-              { 'white--text': !pessoa.entregue },
-              'title',
-              'font-weight-bold'
-            ]"
-          >
-            {{ pessoa.nome }} | {{ pessoa.cpf }}
+      <v-expansion-panels hover>
+        <v-expansion-panel v-for="pessoa in pessoas" :key="pessoa.id" @click="listarEntregas(pessoa.id)">
+          <v-expansion-panel-header>
+            {{ pessoa.name }} | {{ pessoa.cpf }}
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-row> Código: {{ pessoa.id }} </v-row>
-            <v-row> Data de Cadastro: {{ pessoa.dataCadastro }} </v-row>
-            <v-row>
-              {{ pessoa.entregue ? "ENTREGUE" : "NÃO ENTREGUE" }}
-            </v-row>
-            <v-row v-if="pessoa.dataEntrega">
-              Data de entrega: {{ pessoa.dataEntrega }}
-            </v-row>
-            <v-row> Cadastrado por: {{ pessoa.cadastradoPor }} </v-row>
-            <v-row> Entregue por: {{ pessoa.entreguePor }} </v-row>
+            <v-list>
+                <v-list-item>
+                  <v-list-item-content>
+                    Código: {{ pessoa.id }}
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    Data de Cadastro: {{ pessoa.createdAt }} 
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    Cadastrado por: {{ pessoa.user_creator.name }}
+                  </v-list-item-content>
+                </v-list-item>
+            <v-list-group v-if="entregas.length">
+                <template v-slot:activator>
+                  <v-list-item-title>Entregas</v-list-item-title>
+                </template>
+
+              <v-list-item v-for="entrega in entregas" :key="entrega.id">
+                <v-list-item-title>
+                  Data da entrega: {{ entrega.created_at}}
+                </v-list-item-title>
+                <v-list-item-title>
+                  Entregue por: {{ entrega.user_deliverer.name}}
+                </v-list-item-title>
+              </v-list-item>
+            </v-list-group>
+            </v-list>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-    </v-row>
   </v-container>
 </template>
 
 <script>
 export default {
   name: "lista-cadastrados",
-  // mounted() {
-  //   this.carregarPessoas();
-  // },
+  mounted() {
+    this.carregarPessoas();
+  },
   data: () => ({
     pessoa: 0,
-    pessoas: [
-      {
-        id: 1,
-        nome: "João",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: true,
-        dataEntrega: "20/02/2020",
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      },
-      {
-        id: 2,
-        nome: "Maria",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: true,
-        dataEntrega: "20/02/2020",
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      },
-      {
-        id: 3,
-        nome: "Claudio",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: false,
-        dataEntrega: null,
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      },
-      {
-        id: 4,
-        nome: "Carlos",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: true,
-        dataEntrega: "20/02/2020",
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      },
-      {
-        id: 5,
-        nome: "Matheus",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: true,
-        dataEntrega: "20/02/2020",
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      },
-      {
-        id: 6,
-        nome: "Clara",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: false,
-        dataEntrega: null,
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      },
-      {
-        id: 7,
-        nome: "Stephane",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: true,
-        dataEntrega: "20/02/2020",
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      },
-      {
-        id: 8,
-        nome: "Leôncio",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: true,
-        dataEntrega: "20/02/2020",
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      },
-      {
-        id: 9,
-        nome: "Minnie",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: true,
-        dataEntrega: "20/02/2020",
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      },
-      {
-        id: 10,
-        nome: "Mickey",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: true,
-        dataEntrega: "20/02/2020",
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      },
-      {
-        id: 11,
-        nome: "Batman",
-        cpf: "105.389.719-75",
-        dataCadastro: "01/04/2020",
-        entregue: false,
-        dataEntrega: null,
-        cadastradoPor: "Joãozinho Gente Boa",
-        entreguePor: "Carlos Caminhoneiro"
-      }
-    ]
+    pessoas: null,
+    entregas: []
   }),
   methods: {
     carregarPessoas() {
       this.$http
-        .get("rota de carregar pessoas")
-        .then(pessoas => {
-          this.pessoas = pessoas;
+        .listar("people")
+        .then(p => {
+          this.pessoas = p.people
         })
-        .error(() => {
-          /* exibir mensagem de erro? */
+        .catch(() => {
+          this.snackbarMessage = "Erro ao carregar a lista de beneficiários"
+        });
+    },
+    listarEntregas(id) {
+      this.$http
+        .listar("deliveries", {
+          person_id: id
+        })
+        .then(d => {
+          this.entregas = d.deliveries
+        })
+        .catch(() => {
+          this.snackbarMessage = "Erro ao carregar as entregas do beneficiário"
         });
     }
   }
