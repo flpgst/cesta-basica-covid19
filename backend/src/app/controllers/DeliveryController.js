@@ -37,10 +37,19 @@ class DeliveryController {
   async index(req, res) {
     
     const { person_id } = req.query
+    const { cpf } = req.query
     
     const whereStatement = {}
     if(person_id) {
       whereStatement.person_id = person_id
+      
+    }
+    if(cpf) {
+      await Person.findOne({
+        where: {cpf},
+        attributes: ['id']
+      }).then(p => whereStatement.person_id = p.id)
+      
     }
 
     const deliveries = await Delivery.findAll({
