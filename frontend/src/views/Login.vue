@@ -63,24 +63,14 @@ export default {
     snackbarShow: false
 
   }),
-  mounted() {
-    this.autenticate(localStorage)
-  },
   methods: {
-    autenticate({login, password}) {
-      if(!login || !password) return
-      api.criar("sessions", { login, password })
-      .then(session => {
-        localStorage.setItem("token", session.token)
-        this.$emit('autenticado',session.user.permission)
-      })
-    },
     onSubmit() {
       return api
         .criar("sessions", { login: this.login, password: this.password })
-        .then(session => {
-          localStorage.setItem("token", session.token)
-          this.$emit('autenticado',session.user.permission)
+        .then(({token, user}) => {
+          localStorage.setItem("token", token)
+          localStorage.setItem("user", JSON.stringify(user))
+          this.$emit('autenticado',user.permission)
         })
         .catch(() => this.snackbarShow = true)
     },
