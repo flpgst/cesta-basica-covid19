@@ -32,9 +32,7 @@
       </v-container>
       <v-container v-if="showList">
         <v-row>
-          Entregas Cadastradas:
-        </v-row>
-        <v-row>
+          Dados do Beneficiário:
           <v-col cols="12">
             <span>Nome: {{ infoPessoa.name }}</span>
             <span
@@ -48,6 +46,14 @@
               }}</span
             >
             <span>Quantidade: {{ infoPessoa.suply_quantity }}</span>
+          </v-col>
+        </v-row>
+        <v-row>
+          Entregas Cadastradas:
+        </v-row>
+        <v-row>
+          <v-col cols="12">
+            <v-list> </v-list>
           </v-col>
           <v-col cols="12">
             <v-btn class="ma-2" block color="success" @click="onClickEntregar()"
