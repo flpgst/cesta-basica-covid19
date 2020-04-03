@@ -32,6 +32,7 @@ class DeliveryController {
     
     const { person_id } = req.query
     const { cpf } = req.query
+    const { last } = req.query
     
     const whereStatement = {}
     if(person_id) {
@@ -45,10 +46,12 @@ class DeliveryController {
       }).then(p => whereStatement.person_id = p.id)
       
     }
-
-    const deliveries = await Delivery.findAll({
+    const args = {
       where: { ...whereStatement },
       attributes: ['id', 'created_at'],
+      order: [
+        ['id', 'DESC'],
+      ],    
       include: [
         {
           model: Person,
@@ -61,7 +64,10 @@ class DeliveryController {
           attributes: ['id','name', 'login']
         }
       ]
-    })
+    }
+
+
+    const deliveries = last ? await Delivery.findOne(args) : await Delivery.findAll(args)
     
     return res.json({
       deliveries
