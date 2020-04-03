@@ -33,17 +33,14 @@
       </v-layout>
     </v-container>
     <v-snackbar
-        v-model="snackbarShow"
-        top
-        right
-        :color="snackbarColor"
-        :timeout=4000
+      v-model="snackbarShow"
+      top
+      right
+      :color="snackbarColor"
+      :timeout="4000"
     >
       {{ snackbarMessage }}
-       <v-btn
-        icon
-        @click="snackbarShow = false"
-      >
+      <v-btn icon @click="snackbarShow = false">
         <v-icon>mdi-close-circle-outline</v-icon>
       </v-btn>
     </v-snackbar>
@@ -61,18 +58,17 @@ export default {
     snackbarColor: "error",
     snackbarMessage: "Login e senha não conferem",
     snackbarShow: false
-
   }),
   methods: {
     onSubmit() {
       return api
         .criar("sessions", { login: this.login, password: this.password })
-        .then(({token, user}) => {
-          localStorage.setItem("token", token)
-          localStorage.setItem("user", JSON.stringify(user))
-          this.$emit('autenticado',user.permission)
+        .then(({ token, user }) => {
+          localStorage.setItem("token", token);
+          localStorage.setItem("user", JSON.stringify(user));
+          this.$emit("autenticado", user.permission);
         })
-        .catch(() => this.snackbarShow = true)
+        .catch(() => (this.snackbarShow = true));
     },
     redirectUser(permission) {
       switch (permission) {

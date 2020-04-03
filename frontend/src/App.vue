@@ -2,21 +2,37 @@
   <v-app id="app">
     <Login v-if="!user" @autenticado="autenticar" />
     <div v-else>
-    <div id="nav">
-      <router-link v-if="permission === 'admin' || permission === 'cadastro'" to="/cadastro">Cadastro</router-link> |
-      <router-link v-if="permission === 'admin'"  to="/lista_cadastrados">Pessoas Cadastradas</router-link> |
-      <router-link v-if="permission === 'admin'" to="/criar_usuario">Criar Usuário</router-link> |
-      <a href="#" @click="logout">Sair</a> 
+      <div id="nav">
+        <router-link
+          v-if="permission === 'admin' || permission === 'cadastro'"
+          to="/cadastro"
+          >Cadastro</router-link
+        >
+        |
+        <router-link
+          v-if="permission === 'admin' || permission === 'entrega'"
+          to="/entrega"
+          >Entrega</router-link
+        >
+        |
+        <router-link v-if="permission === 'admin'" to="/lista_cadastrados"
+          >Pessoas Cadastradas</router-link
+        >
+        |
+        <router-link v-if="permission === 'admin'" to="/criar_usuario"
+          >Criar Usuário</router-link
+        >
+        |
+        <a href="#" @click="logout">Sair</a>
+      </div>
+      <router-view />
     </div>
-    <router-view />
-    </div>
-    
   </v-app>
 </template>
 
 <script>
-import Login from "./views/Login"
-import EventBus from './plugins/eventBus';
+import Login from "./views/Login";
+import EventBus from "./plugins/eventBus";
 
 export default {
   components: {
@@ -27,39 +43,39 @@ export default {
     permission: null,
     user: null
   }),
-   created() {
+  created() {
     this.getUser();
   },
   methods: {
-    getUser(){
-      this.user = localStorage.getItem('user')
-      if(!this.user) return
-      EventBus.permission = this.permission = JSON.parse(localStorage.user).permission
+    getUser() {
+      this.user = localStorage.getItem("user");
+      if (!this.user) return;
+      EventBus.permission = this.permission = JSON.parse(
+        localStorage.user
+      ).permission;
     },
     autenticar(permission) {
-        this.permission = permission
-        this.user = localStorage.getItem('user')
-        EventBus.permission = permission
-        switch(permission) {
-          case "admin":
-            this.$router.push("lista_cadastrados")
-            break;
-          case "cadastro":
-            this.$router.push("cadastro")
-            break;
-        }
-
+      this.permission = permission;
+      this.user = localStorage.getItem("user");
+      EventBus.permission = permission;
+      switch (permission) {
+        case "admin":
+          this.$router.push("lista_cadastrados");
+          break;
+        case "cadastro":
+          this.$router.push("cadastro");
+          break;
+        case "entrega":
+          this.$router.push("entrega");
+          break;
+      }
     },
     logout() {
       localStorage.clear();
       window.location = "/";
     }
-  },
-  
-  
-
-
-}
+  }
+};
 </script>
 
 <style>

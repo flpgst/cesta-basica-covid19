@@ -1,14 +1,10 @@
 <template>
   <v-container fluid>
-    <v-form
-      ref="form"
-      lazy-validation
-      @submit.prevent="salvarUsuario()" 
-    >
+    <v-form ref="form" lazy-validation @submit.prevent="salvarUsuario()">
       <v-card>
         <v-card-title class="font-weight-bold">
-        Cadastrar Novo Usuário
-      </v-card-title>
+          Cadastrar Novo Usuário
+        </v-card-title>
         <v-col>
           <v-text-field
             v-model="nome"
@@ -56,28 +52,21 @@
       </v-card>
       <v-row justify="end">
         <v-col md="auto">
-          <v-btn
-            color="primary"
-            type="submit"
-            block
-          >
+          <v-btn color="primary" type="submit" block>
             SALVAR
           </v-btn>
         </v-col>
       </v-row>
     </v-form>
     <v-snackbar
-        v-model="snackbarShow"
-        top
-        right
-        :color="snackbarColor"
-        :timeout=4000
+      v-model="snackbarShow"
+      top
+      right
+      :color="snackbarColor"
+      :timeout="4000"
     >
       {{ snackbarMessage }}
-       <v-btn
-        icon
-        @click="snackbarShow = false"
-      >
+      <v-btn icon @click="snackbarShow = false">
         <v-icon>mdi-close-circle-outline</v-icon>
       </v-btn>
     </v-snackbar>
