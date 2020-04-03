@@ -1,12 +1,12 @@
 <template>
   <v-app id="app">
-    <Login v-if="!autenticado" @autenticado="autenticar" />
+    <Login v-if="!user" @autenticado="autenticar" />
     <div v-else>
     <div id="nav">
       <router-link v-if="permission === 'admin' || permission === 'cadastro'" to="/cadastro">Cadastro</router-link> |
       <router-link v-if="permission === 'admin'"  to="/lista_cadastrados">Pessoas Cadastradas</router-link> |
       <router-link v-if="permission === 'admin'" to="/criar_usuario">Criar Usuário</router-link> |
-      <router-link to="/" @click="logout">Sair</router-link> 
+      <a href="#" @click="logout">Sair</a> 
     </div>
     <router-view />
     </div>
@@ -24,12 +24,21 @@ export default {
   },
   data: () => ({
     autenticado: false,
-    permission: null
+    permission: null,
+    user: null
   }),
+   created() {
+    this.getUser();
+  },
   methods: {
+    getUser(){
+      this.user = localStorage.getItem('user')
+      if(!this.user) return
+      EventBus.permission = this.permission = JSON.parse(localStorage.user).permission
+    },
     autenticar(permission) {
         this.permission = permission
-        this.autenticado = true
+        this.user = localStorage.getItem('user')
         EventBus.permission = permission
         switch(permission) {
           case "admin":
@@ -41,10 +50,9 @@ export default {
         }
 
     },
-    logout(){
-      localStorage.clear()
-      this.autenticado = false
-      window.location("/")
+    logout() {
+      localStorage.clear();
+      window.location = "/";
     }
   },
   
