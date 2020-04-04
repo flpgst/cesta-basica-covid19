@@ -23,7 +23,7 @@
             </v-list-item>
             <v-list-item>
               <v-list-item-content>
-                Data de Cadastro: {{ pessoa.createdAt }}
+                Data de Cadastro: {{ format(parseISO(pessoa.createdAt), 'dd-MM-yyyy') }}
               </v-list-item-content>
             </v-list-item>
             <v-list-item>
@@ -38,7 +38,7 @@
 
               <v-list-item v-for="entrega in entregas" :key="entrega.id">
                 <v-list-item-title>
-                  Data da entrega: {{ entrega.created_at }}
+                  Data da entrega: {{ format(parseISO(entrega.created_at), 'dd-MM-yyyy') }}
                 </v-list-item-title>
                 <v-list-item-title>
                   Entregue por: {{ entrega.user_deliverer.name }}
@@ -53,15 +53,20 @@
 </template>
 
 <script>
+
+import { format, parseISO } from 'date-fns'
+
 export default {
   name: "lista-cadastrados",
-  mounted() {
+  created() {
     this.carregarPessoas();
   },
   data: () => ({
     pessoa: 0,
     pessoas: null,
-    entregas: []
+    entregas: [],
+    format,
+    parseISO
   }),
   methods: {
     carregarPessoas() {

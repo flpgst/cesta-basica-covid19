@@ -7,6 +7,7 @@
     </v-row>
     <v-form ref="form" lazy-validation @submit.prevent="salvarUsuario()">
       <v-card>
+        <v-card-text>
         <v-col>
           <v-text-field
             v-model="nome"
@@ -56,6 +57,7 @@
             SALVAR
           </v-btn>
         </v-col>
+        </v-card-text>
       </v-card>
     </v-form>
     <v-snackbar

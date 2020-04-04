@@ -1,67 +1,66 @@
 <template>
-  <v-container fluid>
+  <v-container>
+    <v-row>
+      <v-col cols="auto" class="title">
+        Confirmar Entrega
+      </v-col>
+    </v-row>
     <v-card>
-      <v-card-title class="font-weight-bold">
-        Entregas
-      </v-card-title>
-      <v-container>
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="cpfBusca"
-              type="number"
-              :rules="[v => !!v]"
-              :counter="11"
-              label="CPF do beneficiário*"
-              required
-              autofocus
-            ></v-text-field>
-          </v-col>
-        </v-row>
+      <v-card-text v-if="!showList">
+        <v-col>
+          <v-text-field
+            v-model="cpfBusca"
+            type="text"
+            :rules="[(c) => c.length < 11 || cpf.isValid(c) || 'CPF Inválido']"
+            :counter="11"
+            label="CPF do beneficiário"
+            required
+            autofocus
+          ></v-text-field>
+        </v-col>
         <v-col>
           <v-btn
             @click="onClickBuscar()"
             color="primary"
             block
-            :disabled="!cpfBusca || cpfBusca.length != 11"
+            :disabled="!cpfBusca || !cpf.isValid(cpfBusca)"
             :loading="loading"
           >
             Buscar
           </v-btn>
         </v-col>
-      </v-container>
-      <v-container v-if="showList">
-        <v-row>
-          Dados do Beneficiário:
-          <v-col cols="12">
-            <span>Nome: {{ infoPessoa.name }}</span>
-            <span
-              >Endereço:
-              {{
-                infoPessoa.addr_street +
-                  "." +
-                  infoPessoa.addr_number +
-                  " / " +
-                  infoPessoa.addr_district
-              }}</span
-            >
-            <span>Quantidade: {{ infoPessoa.suply_quantity }}</span>
-          </v-col>
-        </v-row>
-        <v-row>
-          Entregas Cadastradas:
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-list> </v-list>
-          </v-col>
-          <v-col cols="12">
-            <v-btn class="ma-2" block color="success" @click="onClickEntregar()"
-              >Cadastrar Entrega</v-btn
-            >
-          </v-col>
-        </v-row>
-      </v-container>
+      </v-card-text>
+      <v-card-text v-if="showList">
+        <v-col>
+          <p>Nome: {{ pessoa.name }}</p>
+          <p>CPF: {{ pessoa.cpf }}</p>
+          <p
+            >Endereço:
+            {{
+              pessoa.addr_street +
+                " - " +
+                pessoa.addr_number +
+                " - " +
+                pessoa.addr_district
+            }}</p
+          >
+          <p>Quantidade: {{ pessoa.suply_quantity }}</p>
+          <p>Última entrega em: {{ format(parseISO(entrega.created_at), 'dd-MM-yyyy') }}</p>
+        </v-col>
+        <v-col v-if="periodoEntrega > 30 ">
+          <v-btn block color="primary" @click="onClickEntregar()">
+            Confirmar Entrega
+          </v-btn>
+        </v-col>
+        <v-col v-else>
+          <v-alert type="error">
+            Faltam {{ (30 - periodoEntrega) }} dias para a próxima entrega ser liberada!
+          </v-alert>
+          <v-btn block color="primary" @click="showList = false, cpfBusca = null">
+            Buscar nova pessoa
+          </v-btn>
+        </v-col>
+      </v-card-text>
     </v-card>
     <v-snackbar
       v-model="snackbarShow"
@@ -79,16 +78,23 @@
 </template>
 
 <script>
+import { format, parseISO, differenceInCalendarDays } from 'date-fns'
+import { cpf } from 'cpf-cnpj-validator'
 export default {
   data: () => ({
-    cpfBusca: null,
+    cpf,
+    cpfBusca: "",
     loading: false,
     showList: false,
-    infoPessoa: "",
-    entregas: null,
+    pessoa: null,
+    entrega: null,
     snackbarShow: false,
     snackbarColor: "primary",
-    snackbarMessage: null
+    snackbarMessage: null,
+    periodoEntrega: null,
+    format,
+    parseISO,
+    differenceInCalendarDays
   }),
 
   methods: {
@@ -98,18 +104,21 @@ export default {
           cpf: this.cpfBusca
         })
         .then(p => {
-          this.infoPessoa = p.people;
-          console.log("this.infoPessoa :", this.infoPessoa);
+          this.pessoa = p.people;
           this.$http
             .listar("deliveries", {
-              person_id: this.infoPessoa.id
+              person_id: this.pessoa.id,
+              last: true
             })
             .then(d => {
-              this.entregas = d.deliveries;
-              console.log("this.entregas :", this.entregas);
+              this.entrega = d.deliveries;
+              this.periodoEntrega = this.differenceInCalendarDays(new Date(), parseISO(d.deliveries.created_at))
+              console.log('periodoEntrega :', this.periodoEntrega);
+              this.showList = true
+              
             })
             .catch(() => {
-              this.snackbarMessage = "Erro ao buscar CPF";
+              this.snackbarMessage = "Erro ao buscar entregas";
               this.snackbarColor = "error";
               this.snackbarShow = true;
             });
@@ -123,8 +132,8 @@ export default {
 
     onClickEntregar() {
       this.$http
-        .criar("deliveries", {
-          person_id: this.infoPessoa.id
+        .criar("delivery", {
+          person_id: this.pessoa.id
         })
         .then(() => {
           this.snackbarMessage = "Entrega Cadastrada!";

@@ -9,15 +9,15 @@
       </v-col>
     </v-row>
     <v-card v-if="!showForm">
+        <v-card-text>
         <v-col>
             <v-text-field
               v-model="cpfBusca"
               @input="onChangeBuscar()"
-              type="number"
-              :rules="[v => !!v]"
+              type="text"
+              :rules="[c => c.length < 11 || cpf.isValid(c) || 'CPF Inválido']"
               :counter="11"
-              label="CPF do beneficiário*"
-              required
+              label="CPF do beneficiário"
               autofocus
             ></v-text-field>
         </v-col>
@@ -26,7 +26,7 @@
             @click="onClickBuscar()"
             color="primary"
             block
-            :disabled="!cpfBusca || cpfBusca.length != 11"
+            :disabled="!cpfBusca || !cpf.isValid(cpfBusca)"
             :loading="loading"
           >
             Buscar
@@ -35,6 +35,7 @@
         <v-alert v-if="cpfCadastrado" type="warning"
           >O CPF {{ cpfCadastrado }} já está cadastrado.</v-alert
         >
+        </v-card-text>
     </v-card>
 
     <v-form ref="form" lazy-validation @submit.prevent="onClickSave()">
@@ -51,17 +52,17 @@
 
             <v-col>
               <v-text-field
-                v-model="cpf"
-                type="number"
+                v-model="cpfBusca"
+                type="text"
                 :hint="'Insira apenas números'"
                 persistent-hint
-                :rules="[v => !!v]"
+                :rules="[c => cpf.isValid(c) || 'CPF Inválido']"
                 :counter="11"
                 label="CPF"
                 required
               ></v-text-field>
             </v-col>
-
+            <v-row class="mx-auto">
             <v-col cols="10">
               <v-text-field
                 v-model="endereco_rua"
@@ -79,7 +80,7 @@
                 required
               ></v-text-field>
             </v-col>
-
+            </v-row>
             <v-col>
               <v-text-field
                 v-model="endereco_bairro"
@@ -134,14 +135,16 @@
 </template>
 
 <script>
+
+import {cpf} from 'cpf-cnpj-validator'
+
 export default {
   data: () => ({
     form_valid: false,
     showForm: false,
-    cpfBusca: null,
+    cpfBusca: "",
     cpfCadastrado: null,
     nome: null,
-    cpf: null,
     endereco_rua: null,
     endereco_numero: null,
     endereco_bairro: null,
@@ -150,7 +153,8 @@ export default {
     loading: false,
     snackbarShow: false,
     snackbarColor: "primary",
-    snackbarMessage: null
+    snackbarMessage: null,
+    cpf
   }),
 
   methods: {
@@ -169,7 +173,6 @@ export default {
           this.snackbarMessage = "CPF apto para cadastro!";
           this.snackbarColor = "info";
           this.snackbarShow = true;
-          this.cpf = this.cpfBusca;
           this.showForm = true;
         });
     },
@@ -178,7 +181,7 @@ export default {
         this.$http
           .criar("person", {
             name: this.nome,
-            cpf: this.cpf,
+            cpf: this.cpfBusca,
             family_members: this.qtde_pessoas,
             addr_street: this.endereco_rua,
             addr_number: this.endereco_numero,

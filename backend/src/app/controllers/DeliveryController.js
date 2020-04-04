@@ -1,20 +1,22 @@
+import sequelize from 'sequelize'
+import {parseISO, differenceInCalendarDays } from 'date-fns'
 import Delivery from '../models/Delivery'
 import User from '../models/User'
 import Person from '../models/Person'
-import sequelize from 'sequelize'
 
 class DeliveryController {
   async store(req, res) {
     
-    const { person_id } = req.query
+    const { person_id } = req.body
 
     const lastDelivery = await Delivery.findAll({
       limit: 1,
       where: { person_id },
       order: [ [ 'createdAt', 'DESC' ]]
     })
-
-    // fazer verificação de 30 dias
+    const deliveryRange = differenceInCalendarDays(new Date(), lastDelivery[0].createdAt)
+    if (deliveryRange <= 30)
+      return res.status(400).json(`Faltam ${30 - deliveryRange} dias para a próxima entrega ser liberada!`)
 
     const delivery = {
       person_id,
