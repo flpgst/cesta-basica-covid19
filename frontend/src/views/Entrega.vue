@@ -45,9 +45,9 @@
             }}</p
           >
           <p>Quantidade: {{ pessoa.suply_quantity }}</p>
-          <p>Última entrega em: {{ format(parseISO(entrega.created_at), 'dd-MM-yyyy') }}</p>
+          <p v-if="entrega.created_at">Última entrega em: {{ entrega.created_at }}</p>
         </v-col>
-        <v-col v-if="periodoEntrega > 30 ">
+        <v-col v-if="periodoEntrega >= 30 || primeiraEntrega">
           <v-btn block color="primary" @click="onClickEntregar()">
             Confirmar Entrega
           </v-btn>
@@ -81,6 +81,7 @@
 import { format, parseISO, differenceInCalendarDays } from 'date-fns'
 import { cpf } from 'cpf-cnpj-validator'
 export default {
+  name: 'entrega',
   data: () => ({
     cpf,
     cpfBusca: "",
@@ -92,6 +93,7 @@ export default {
     snackbarColor: "primary",
     snackbarMessage: null,
     periodoEntrega: null,
+    primeiraEntrega: false,
     format,
     parseISO,
     differenceInCalendarDays
@@ -112,8 +114,12 @@ export default {
             })
             .then(d => {
               this.entrega = d.deliveries;
-              this.periodoEntrega = this.differenceInCalendarDays(new Date(), parseISO(d.deliveries.created_at))
-              console.log('periodoEntrega :', this.periodoEntrega);
+              if(d.deliveries.length > 0) {
+                this.primeiraEntrega = false
+                this.periodoEntrega = this.differenceInCalendarDays(new Date(), parseISO(d.deliveries[0].created_at))
+              } else {
+                this.primeiraEntrega = true
+              }
               this.showList = true
               
             })

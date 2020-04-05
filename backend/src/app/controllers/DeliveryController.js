@@ -14,7 +14,8 @@ class DeliveryController {
       where: { person_id },
       order: [ [ 'createdAt', 'DESC' ]]
     })
-    const deliveryRange = differenceInCalendarDays(new Date(), lastDelivery[0].createdAt)
+
+    const deliveryRange = lastDelivery[0] && differenceInCalendarDays(new Date(), lastDelivery[0].createdAt)
     if (deliveryRange <= 30)
       return res.status(400).json(`Faltam ${30 - deliveryRange} dias para a próxima entrega ser liberada!`)
 
@@ -69,7 +70,24 @@ class DeliveryController {
     }
 
 
-    const deliveries = last ? await Delivery.findOne(args) : await Delivery.findAll(args)
+    const test = await Delivery.findAll({
+      where: { person_id },
+      attributes: ['id', 'created_at'],    
+      include: [
+        {
+          model: Person,
+          as: 'person',
+          attributes: ['id','name', 'cpf']
+        },
+        {
+          model: User,
+          as: 'user_deliverer',
+          attributes: ['id','name', 'login']
+        }
+      ]
+    })
+
+    const deliveries = last ? await Delivery.findAll({...args, limit:1}) : await Delivery.findAll(args)
     
     return res.json({
       deliveries

@@ -193,6 +193,7 @@ export default {
             this.snackbarColor = "success";
             this.snackbarShow = true;
             this.$refs.form.reset();
+            this.showForm = false;
           })
           .catch(() => {
             this.snackbarMessage = "Erro ao cadastrar beneficiário";

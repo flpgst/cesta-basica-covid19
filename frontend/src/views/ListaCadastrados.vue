@@ -45,6 +45,9 @@
                 </v-list-item-title>
               </v-list-item>
             </v-list-group>
+          <v-list-item v-else>
+            Nenhuma entrega registrada
+          </v-list-item>
           </v-list>
         </v-expansion-panel-content>
       </v-expansion-panel>
