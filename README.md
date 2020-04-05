@@ -37,6 +37,11 @@ Este comando irá criar as pasta backend/dist e frontend/dist estas pastas dever
   Para rodar a aplicação em produção basta rodar o comando npm start no servidor e acessar a url configurada no servidor web.
   
 
+# Software desenvolvido por:
+ - Darlan Robson Voss
+ - Filipe Augusto Gonçalves
+ - Mateus Pedroni
 
+# Este é um software open-source.
 
 
