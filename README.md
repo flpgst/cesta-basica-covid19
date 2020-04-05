@@ -1,6 +1,8 @@
 # cesta-basica-covid19
 Software para cadastrar pessoas e gerenciar o recebimento da cesta básica fornecida durante a quarentena do Corona Vírus
 
+<img src="./demo.gif">
+
 # Processos de instalação
 Esse sistema utiliza nodeJS no backend e VueJS no frontend, sendo assim é necessário ter o node instalada para poder executar este sistema.
 Para instruções de instalação do node visite:
