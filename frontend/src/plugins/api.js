@@ -1,7 +1,8 @@
 import axios from "axios";
-import config from "./config";
 
-const URL_BASE = config.api_url;
+const URL_BASE = process.env.NODE_ENV === "production" 
+  ? process.env.VUE_APP_PROD_API_URL 
+  : process.env.VUE_APP_DEV_API_URL;
 
 const servidor = axios.create({
   baseURL: URL_BASE,

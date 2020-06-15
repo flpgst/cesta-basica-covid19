@@ -28,3 +28,12 @@ frontend/node_modules/
 # build / generate output
 backend/dist
 frontend/dist
+yarn.lock
+frontend/yarn.lock
+node_modules/.yarn-integrity
+
+# local env files
+frontend/.env.local
+frontend/.env.*.local
+frontend/yarn.lock
+frontend/yarn.lock
