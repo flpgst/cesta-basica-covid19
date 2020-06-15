@@ -4,6 +4,14 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import api from "./plugins/api";
+import * as Sentry from '@sentry/browser';
+import { Vue as VueIntegration } from '@sentry/integrations';
+
+
+Sentry.init({
+  dsn: process.env.VUE_APP_SENTRY_DSN,
+  integrations: [new VueIntegration({Vue, attachProps: true, logErrors: true})],
+});
 
 Vue.config.productionTip = false;
 
